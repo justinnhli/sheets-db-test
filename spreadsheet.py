@@ -5,13 +5,20 @@
 
 from os import environ as env
 from json import loads as parse_json
+from os.path import exists as file_exists
 
 from flask import Flask
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
 def get_keyfile_dict():
-    return parse_json(env['client_secrets_json'])
+    # get client secrets from either the environment or from a local file
+    if 'client_secrets_json' in env:
+        return parse_json(env['client_secrets_json'])
+    elif file_exists('client_secrets.json'):
+        with open('client_secrets.json') as fd:
+            return parse_json(fd.read())
+    raise RuntimeError('cannot find client secrets json')
 
 def create_client():
     # use creds to create a client to interact with the Google Drive API
