@@ -25,9 +25,17 @@ app = Flask(__name__)
 def index():
     client = create_client()
 
-    # Find a workbook by name and open the first sheet
-    # Make sure you use the right name here.
-    sheet = client.open('Example Spreadsheet').sheet1
+    # Find a workbook by id. For example, if the URL is
+    #
+    # https://docs.google.com/spreadsheets/d/1sbP8s0p0I0QG329lG_2uIcyb6hwcA1ZhiJrb4wMFI4o/edit#gid=0
+    #
+    # then you would use:
+    #
+    # client.open_by_key('1sbP8s0p0I0QG329lG_2uIcyb6hwcA1ZhiJrb4wMFI4o')
+    workbook = client.open_by_key('1sbP8s0p0I0QG329lG_2uIcyb6hwcA1ZhiJrb4wMFI4o')
+
+    # open the first sheet from the workbook
+    sheet = workbook.get_worksheet(0)
 
     # Extract and print all of the values
     list_of_hashes = sheet.get_all_records()
