@@ -1,1 +1,1 @@
-web: gunicorn gdb:spreadsheet --log-file=-
+web: gunicorn spreadsheet:app --log-file=-
