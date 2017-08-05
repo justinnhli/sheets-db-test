@@ -23,6 +23,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
+    return get_keyfile_dict()
     client = create_client()
 
     # Find a workbook by name and open the first sheet
