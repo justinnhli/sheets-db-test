@@ -3,22 +3,24 @@
 # adapted from
 # https://www.twilio.com/blog/2017/02/an-easy-way-to-read-and-write-to-a-google-spreadsheet-in-python.html
 
-from os import environ as env
 from json import loads as parse_json
-from os.path import exists as file_exists
+from os import environ as env
+from os.path import exists as file_exists, join as join_path, realpath, expanduser, dirname
 
 from flask import Flask
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
+CLIENT_SECRET_FILE = join_path(realpath(expanduser(dirname(__file__))), 'client_secret.json')
+
 def get_keyfile_dict():
-    # get client secrets from either the environment or from a local file
-    if 'client_secrets_json' in env:
-        return parse_json(env['client_secrets_json'])
-    elif file_exists('client_secrets.json'):
-        with open('client_secrets.json') as fd:
+    # get client secret from either the environment or from a local file
+    if 'client_secret_json' in env:
+        return parse_json(env['client_secret_json'])
+    elif file_exists(CLIENT_SECRET_FILE):
+        with open(CLIENT_SECRET_FILE) as fd:
             return parse_json(fd.read())
-    raise RuntimeError('cannot find client secrets json')
+    raise RuntimeError('cannot find client secret json file')
 
 def create_client():
     # use credentials to create a client to interact with the Google Sheets API
