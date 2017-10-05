@@ -13,6 +13,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 CLIENT_SECRET_FILE = join_path(realpath(expanduser(dirname(__file__))), 'client_secret.json')
 
+
 def get_keyfile_dict():
     # get client secret from either the environment or from a local file
     if 'client_secret_json' in env:
@@ -22,13 +23,16 @@ def get_keyfile_dict():
             return parse_json(fd.read())
     raise RuntimeError('cannot find client secret json file')
 
+
 def create_client():
     # use credentials to create a client to interact with the Google Sheets API
     scope = ['https://spreadsheets.google.com/feeds']
     creds = ServiceAccountCredentials.from_json_keyfile_dict(get_keyfile_dict(), scope)
     return gspread.authorize(creds)
 
+
 app = Flask(__name__)
+
 
 @app.route('/')
 def index():
@@ -49,6 +53,7 @@ def index():
     # extract and print all of the values
     list_of_hashes = sheet.get_all_records()
     return str(list_of_hashes)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
